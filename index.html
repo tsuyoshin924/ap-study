@@ -87,6 +87,8 @@
     <div class="year-selector">
       <button id="btn-r07a" class="year-btn active" onclick="switchYear('r07a')">R07秋期</button>
       <button id="btn-r07s" class="year-btn" onclick="switchYear('r07s')">R07春期</button>
+      <button id="btn-r06a" onclick="switchYear('r06a')" class="year-btn">R06秋期</button>
+
     </div>
   </header>
 
@@ -148,7 +150,9 @@
 const EXAMS = [
   { id: 'r07a', label: 'R07秋期', file: 'data/r07a_am.json' },
   { id: 'r07s', label: 'R07春期', file: 'data/r07s_am.json' },
+  { id: 'r06a', label: 'R06秋期', file: 'data/r06a_am.json' },  // ← 追加
 ];
+
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 状態
