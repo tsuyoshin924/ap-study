@@ -22,9 +22,11 @@
   header h1 { font-size: clamp(22px, 5vw, 32px); font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 8px; }
   header h1 span { color: var(--accent-am); }
   .header-sub { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
-  .year-selector { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .year-btn { padding: 8px 18px; border: 1.5px solid var(--border); border-radius: 6px; background: var(--surface2); color: var(--text-muted); cursor: pointer; font-family: var(--sans); font-size: 13px; font-weight: 700; transition: all .2s; }
-  .year-btn.active { background: var(--accent-am); border-color: var(--accent-am); color: #0d0f14; }
+  .year-selector { display: flex; justify-content: center; }
+  .year-select { padding: 10px 16px; border: 1.5px solid var(--border); border-radius: 6px; background: var(--surface2); color: var(--text); cursor: pointer; font-family: var(--sans); font-size: 14px; font-weight: 500; transition: border-color .2s, background .2s; }
+  .year-select:hover { border-color: var(--accent-am); background: rgba(245,200,66,.06); }
+  .year-select:focus { outline: none; border-color: var(--accent-am); box-shadow: 0 0 0 2px rgba(245,200,66,.1); }
+  .year-select option { background: var(--surface); color: var(--text); }
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 16px; animation: fadeUp .4s ease both; }
   .card + .card { animation-delay: .07s; }
   .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -74,7 +76,7 @@
   @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
   @keyframes fadeDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:none; } }
   .hidden { display: none !important; }
-  @media (max-width: 480px) { .menu-grid { grid-template-columns: 1fr; } .year-selector { gap: 8px; } }
+  @media (max-width: 480px) { .menu-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -85,14 +87,15 @@
     <h1>応用情報技術者試験<br><span>対策アプリ</span></h1>
     <p class="header-sub">公式過去問 — 午前80問</p>
     <div class="year-selector">
-      <button id="btn-r07a" class="year-btn active" onclick="switchYear('r07a')">R07秋期</button>
-      <button id="btn-r07s" class="year-btn" onclick="switchYear('r07s')">R07春期</button>
-      <button id="btn-r06a" class="year-btn" onclick="switchYear('r06a')" class="year-btn">R06秋期</button>
-      <button id="btn-r06s" class="year-btn" onclick="switchYear('r06s')">R06春期</button>
-      <button id="btn-r05a" class="year-btn" onclick="switchYear('r05a')">R05秋期</button>
-　　　　<button id="btn-r05s" class="year-btn" onclick="switchYear('r05s')">R05春期</button>
-      <button id="btn-r04a" class="year-btn" onclick="switchYear('r04a')">R04秋期</button>
-
+      <select id="year-select" class="year-select" onchange="switchYear(this.value)">
+        <option value="r07a">R07秋期</option>
+        <option value="r07s">R07春期</option>
+        <option value="r06a">R06秋期</option>
+        <option value="r06s">R06春期</option>
+        <option value="r05a">R05秋期</option>
+        <option value="r05s">R05春期</option>
+        <option value="r04a">R04秋期</option>
+      </select>
     </div>
   </header>
 
@@ -159,9 +162,7 @@ const EXAMS = [
   { id: 'r05a', label: 'R05秋期', file: 'data/r05a_am.json' },
   { id: 'r05s', label: 'R05春期', file: 'data/r05s_am.json' },
   { id: 'r04a', label: 'R04秋期', file: 'data/r04a_am.json' },
-
 ];
-
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 状態
@@ -175,9 +176,7 @@ const state = { correct: 0, wrong: 0 };
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 async function switchYear(year) {
   currentYear = year;
-  document.querySelectorAll('.year-btn').forEach(b => {
-    b.classList.toggle('active', b.id === 'btn-' + year);
-  });
+  document.getElementById('year-select').value = year;
   const exam = EXAMS.find(e => e.id === year);
   try {
     const res = await fetch(exam.file);
